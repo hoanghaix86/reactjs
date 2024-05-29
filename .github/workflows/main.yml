@@ -14,4 +14,11 @@ jobs:
           node-version: '20'
       - run: yarn --frozen-lockfile
       - run: yarn build
+  
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-22.04
+    needs: build
+    steps:
+      - run: echo "Deploying!"
     
