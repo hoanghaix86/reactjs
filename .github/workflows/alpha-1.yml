@@ -1,0 +1,12 @@
+name: Hello Alpha 1
+
+on:
+  workflow_dispatch:
+
+jobs:
+  print:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Print Hello Alpha 1
+        run: echo "Hello Alpha 1"
+
