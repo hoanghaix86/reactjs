@@ -45,4 +45,4 @@ jobs:
       
       - name: Deploy to Staging
         run: |
-          rsync -avzhe --delete --dry-run ssh -i ${{ secrets.SSH_PRIVATE_KEY }} --progress $GITHUB_WORKSPACE/dist ${{ secrets.REMOTE_USER }}@${{ secrets.REMOTE_IP }}:/var/www/html
+          rsync -v ssh -i ${{ secrets.SSH_PRIVATE_KEY }} $GITHUB_WORKSPACE/dist ${{ secrets.REMOTE_USER }}@${{ secrets.REMOTE_IP }}:/var/www/html
