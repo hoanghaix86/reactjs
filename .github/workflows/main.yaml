@@ -13,3 +13,5 @@ jobs:
         uses: actions/checkout@v4
       
       - run: ls -la
+
+      - run: hostname -i
