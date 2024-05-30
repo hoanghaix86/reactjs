@@ -52,3 +52,50 @@ jobs:
           ls -al $HOME/.ssh
           rsync -avz -e "ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i $HOME/.ssh/$GITHUB_SHA" \
             --progress $GITHUB_WORKSPACE/dist/ ${{ secrets.REMOTE_USER }}@${{ secrets.REMOTE_HOST }}:/var/www/html
+
+  deploy:
+    environment: staging
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Detect Package Manager
+        run: |
+          if [ -f yarn.lock ]; then echo "name=yarn" >> "$GITHUB_OUTPUT"; \
+          elif [ -f package-lock.json ]; then echo "pkgname=npm" >> "$GITHUB_OUTPUT"; \
+          elif [ -f pnpm-lock.yaml ]; then echo "pkgname=pnpm" >> "$GITHUB_OUTPUT"; \
+          else echo "Package Manager not found!" && exit 1; \
+          fi
+        id: package-manager
+      
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: ${{ steps.package-manager.outputs.name }}
+            
+      - name: Install dependencies
+        run: |
+          if [ -f yarn.lock ]; then yarn --frozen-lockfile; \
+          elif [ -f package-lock.json ]; then npm ci; \
+          elif [ -f pnpm-lock.yaml ]; then corepack enable pnpm && pnpm i --frozen-lockfile; \
+          else echo "Lockfile not found." && exit 1; \
+          fi
+      
+      - name: Build Source
+        run: |
+          if [ -f yarn.lock ]; then yarn run build; \
+          elif [ -f package-lock.json ]; then npm run build; \
+          elif [ -f pnpm-lock.yaml ]; then corepack enable pnpm && pnpm run build; \
+          else echo "Lockfile not found." && exit 1; \
+          fi
+      
+      - name: Deploy to Staging
+        run: |
+          mkdir -p $HOME/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > "$HOME/.ssh/$GITHUB_SHA"
+          chmod 600 "$HOME/.ssh/$GITHUB_SHA"
+          ls -al $HOME/.ssh
+          rsync -avz -e "ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i $HOME/.ssh/$GITHUB_SHA" \
+            --progress $GITHUB_WORKSPACE/dist/ ${{ secrets.REMOTE_USER }}@${{ secrets.REMOTE_HOST }}:/var/www/html
