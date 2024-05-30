@@ -47,8 +47,8 @@ jobs:
       - name: Deploy to Staging
         run: |
           mkdir -p $HOME/.ssh
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" > $HOME/.ssh/$env:GITHUB_SHA
-          chmod 600 $HOME/.ssh/$env:GITHUB_SHA
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > "$HOME/.ssh/$env:GITHUB_SHA"
+          chmod 600 "$HOME/.ssh/$env:GITHUB_SHA"
           ls -al $HOME/.ssh
           rsync -avz -e "ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i $HOME/.ssh/$env:GITHUB_SHA" \
             --progress $GITHUB_WORKSPACE/dist/ ${{ secrets.REMOTE_USER }}@${{ secrets.REMOTE_HOST }}:/var/www/html
