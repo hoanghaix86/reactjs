@@ -14,17 +14,21 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
       
+      - name: Detect Package Manager
+        run: |
+          if [ -f yarn.lock ]; then echo "name=yarn" >> "$GITHUB_OUTPUT"; \
+          elif [ -f package-lock.json ]; then echo "pkgname=npm" >> "$GITHUB_OUTPUT"; \
+          elif [ -f pnpm-lock.yaml ]; then echo "pkgname=pnpm" >> "$GITHUB_OUTPUT"; \
+          else echo "Package Manager not found!" && exit 1; \
+          fi
+        id: package-manager
+      
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: |
-            if [ -f yarn.lock ]; then echo "yarn"; \
-            elif [ -f package-lock.json ]; then echo "npm"; \
-            elif [ -f pnpm-lock.yaml ]; then echo "pnpm"; \
-            else echo "Lockfile not found." && exit 1; \
-            fi
-      
+          cache: ${{ steps.package-manager.outputs.name }}
+            
       - name: Install dependencies
         run: |
           if [ -f yarn.lock ]; then yarn --frozen-lockfile; \
