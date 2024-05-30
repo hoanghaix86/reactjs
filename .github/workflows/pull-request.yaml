@@ -1,7 +1,7 @@
 name: Deploy
 
 on:
-  push:
+  pull_request:
     branches:
       - ci
 
@@ -42,7 +42,4 @@ jobs:
           elif [ -f pnpm-lock.yaml ]; then corepack enable pnpm && pnpm run build; \
           else echo "Lockfile not found." && exit 1; \
           fi
-      
-      - name: Deploy to Staging
-        run: |
-          rsync -avzhe --delete --dry-run ssh -i ${{ secrets.SSH_PRIVATE_KEY }} --progress $GITHUB_WORKSPACE/dist ${{ secrets.REMOTE_USER }}@${{ secrets.REMOTE_IP }}:/var/www/html
+          
