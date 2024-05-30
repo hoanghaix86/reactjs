@@ -27,7 +27,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: ${{ steps.package-manager.outputs.name }}
+          cache: '${{ steps.package-manager.outputs.name }}'
             
       - name: Install dependencies
         run: |
