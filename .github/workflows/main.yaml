@@ -17,7 +17,13 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: 20
+          cache: |
+            if [ -f yarn.lock ]; then echo "yarn"; \
+            elif [ -f package-lock.json ]; then echo "npm"; \
+            elif [ -f pnpm-lock.yaml ]; then echo "pnpm"; \
+            else echo "Lockfile not found." && exit 1; \
+            fi
       
       - name: Install dependencies
         run: |
