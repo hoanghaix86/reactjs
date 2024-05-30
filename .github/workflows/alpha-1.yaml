@@ -1,4 +1,4 @@
-name: Hello Alpha 2
+name: Hello
 
 on:
   workflow_dispatch:
