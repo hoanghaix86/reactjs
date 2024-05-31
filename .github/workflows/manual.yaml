@@ -69,7 +69,7 @@ jobs:
             
             👉 Actions: [Here](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
             
-            📄 See changes at: [Here](https://github\\.com/${{ github.repository }}/commit/${{ github.sha }})
+            📄 See changes: [Here](https://github\\.com/${{ github.repository }}/commit/${{ github.sha }})
             "
           }'
 
