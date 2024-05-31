@@ -60,14 +60,15 @@ jobs:
           ${{ github.actor }} created commit:
           See changes at: https://github.com/${{ github.repository }}/commit/${{github.sha}}
           EOF
-          curl -X POST -H 'Content-type: application/json' \
+          curl -X POST ${{ secrets.TELEGRAM_API }} \
+          -H 'Content-type: application/json' \
           --data-binary @- <<EOF
           {
             "chat_id": "${{ secrets.TELEGRAM_CHAT_ID }}",
             "parse_mode": "MarkdownV2",
             "text": "$MESSAGE"
           }
-          EOF ${{ secrets.TELEGRAM_API }}
+          EOF
 
 
             
