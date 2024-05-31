@@ -64,7 +64,7 @@ jobs:
             "text": "
             ✅ Deployment to staging completed successfully
             🚀 ${{ github.actor }} created commit:
-            \\> See changes at: https://github.com/${{ github.repository }}/commit/${{ github.sha }}
+            \\> See changes at: https://github\\.com/${{ github.repository }}/commit/${{ github.sha }}
             "
           }'
 
