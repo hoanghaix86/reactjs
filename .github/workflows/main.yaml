@@ -55,14 +55,16 @@ jobs:
       
       - name: Notify
         run: |
-          cat EOF > message
+          cat >> $message <<EOF
           ✅ Deployment to staging completed successfully!
+          ${{ github.actor }} created commit:
+          See changes at: https://github.com/${{ github.repository }}/commit/${{github.sha}}
           EOF
           curl -X POST -H 'Content-type: application/json' \
-            -d '{
-                  "chat_id": "${{ secrets.TELEGRAM_CHAT_ID }}",
-                  "text":"✅ Deployment to staging completed successfully!"
-                }' ${{ secrets.TELEGRAM_API }}
+            -d "{"\
+                  "chat_id": "${{ secrets.TELEGRAM_CHAT_ID }}",\
+                  "text": "$message"\
+                }" ${{ secrets.TELEGRAM_API }}
 
 
             
