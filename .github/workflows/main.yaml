@@ -61,10 +61,8 @@ jobs:
           See changes at: https://github.com/${{ github.repository }}/commit/${{github.sha}}
           EOF
           curl -X POST -H 'Content-type: application/json' \
-            -d "{"\
-                  "chat_id": "${{ secrets.TELEGRAM_CHAT_ID }}",\
-                  "text": "$message"\
-                }" ${{ secrets.TELEGRAM_API }}
+            -d "{\"chat_id\": \"${{ secrets.TELEGRAM_CHAT_ID }}\", \"parse_mode\": \"MarkdownV2\", \"text\": \"$message\"}" \
+            ${{ secrets.TELEGRAM_API }}
 
 
             
