@@ -62,7 +62,7 @@ jobs:
             "chat_id": -1002226386683,
             "parse_mode": "MarkdownV2",
             "text": "
-            ✅ Deployment to staging completed successfully
+            ✅ Deployment to staging completed successfully\\!
 
             🚀 ${{ github.actor }} created commit:
             
