@@ -60,7 +60,7 @@ jobs:
           -H 'Content-type: application/json' \
           --data-raw '
           {
-            "chat_id": -1002226386683,
+            "chat_id": ${{ secrets.TELEGRAM_CHAT_ID }},
             "parse_mode": "MarkdownV2",
             "text": "
             ✅ Deployment to staging completed successfully\\!
