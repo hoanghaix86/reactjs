@@ -45,6 +45,7 @@ jobs:
           fi
       
       - name: Deploy to Staging
+        
         run: |
           mkdir -p $HOME/.ssh
           echo "${{ secrets.SSH_PRIVATE_KEY }}" > "$HOME/.ssh/$GITHUB_SHA"
