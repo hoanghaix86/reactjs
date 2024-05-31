@@ -63,8 +63,12 @@ jobs:
             "parse_mode": "MarkdownV2",
             "text": "
             ✅ Deployment to staging completed successfully
+
             🚀 ${{ github.actor }} created commit:
-            \\> See changes at: [Here](https://github\\.com/${{ github.repository }}/commit/${{ github.sha }})
+            
+            👉 Actions: [Here](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
+            
+            📄 See changes at: [Here](https://github\\.com/${{ github.repository }}/commit/${{ github.sha }})
             "
           }'
 
