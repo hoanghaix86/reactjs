@@ -65,6 +65,8 @@ jobs:
             "text": "
             ✅ Deployment to staging completed successfully\\!
 
+            CI/CD Pipeline: ${{ github.workflow }}
+
             🚀 ${{ github.actor }} created commit:
             
             👉 Actions: [Here](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
