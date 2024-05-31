@@ -57,17 +57,16 @@ jobs:
         run: |
           curl -X POST ${{ secrets.TELEGRAM_API }} \
           -H 'Content-type: application/json' \
-          --data-binary @- <<EOF
+          --data-raw '
           {
-            "chat_id": "${{ secrets.TELEGRAM_CHAT_ID }}",
+            "chat_id": -1002226386683,
             "parse_mode": "MarkdownV2",
             "text": "
-            ✅ Deployment to staging completed successfully🚀
-            ${{ github.actor }} created commit:
-            See changes at: https://github.com/${{ github.repository }}/commit/${{github.sha}}
+            ✅ Deployment to staging completed successfully
+            🚀 ${{ github.actor }} created commit:
+            \\\\>See changes at: https://github.com/${{ github.repository }}/commit/${{ github.sha }}
             "
-          }
-          EOF
+          }'
 
 
             
