@@ -1,15 +1,13 @@
-name: Deploy
+name: Continuous Integration and Deployment
 
 on:
-  # pull_request:
-  #   branches:
-  #     - ci
   push:
     branches:
       - ci
 
 jobs:
   build:
+    environment: staging
     runs-on: ubuntu-22.04
     steps:
       - name: Checkout code
@@ -45,4 +43,35 @@ jobs:
           elif [ -f pnpm-lock.yaml ]; then corepack enable pnpm && pnpm run build; \
           else echo "Lockfile not found." && exit 1; \
           fi
-          
+      
+      - name: Deploy to Staging
+        run: |
+          mkdir -p $HOME/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > "$HOME/.ssh/$GITHUB_SHA"
+          chmod 600 "$HOME/.ssh/$GITHUB_SHA"
+          ls -al $HOME/.ssh
+          rsync -avz -e "ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i $HOME/.ssh/$GITHUB_SHA" \
+            --progress $GITHUB_WORKSPACE/dist/ ${{ secrets.REMOTE_USER }}@${{ secrets.REMOTE_HOST }}:/var/www/html
+      
+      - name: Notify
+        run: |
+          curl -X POST ${{ secrets.TELEGRAM_API }} \
+          -H 'Content-type: application/json' \
+          --data-raw '
+          {
+            "chat_id": ${{ secrets.TELEGRAM_CHAT_ID }},
+            "parse_mode": "MarkdownV2",
+            "text": "
+            ✅ Deployment to staging completed successfully\\!
+
+            CI/CD Pipeline: ${{ github.workflow }}
+
+            ID: ${{ github.run_id }}
+
+            🚀 ${{ github.actor }} created commit:
+            
+            👉 Actions: [Here](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
+            
+            📄 See changes: [Here](https://github\\.com/${{ github.repository }}/commit/${{ github.sha }})
+            "
+          }'
